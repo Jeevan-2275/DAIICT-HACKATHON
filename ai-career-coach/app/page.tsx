@@ -259,6 +259,34 @@ export default function Home() {
 
 
 
+<section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="relative rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-12 shadow-2xl overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            
+            <div className="relative text-center">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                Ready to Accelerate Your Career?
+              </h2>
+              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of professionals who've transformed their careers with our AI-powered tools.
+              </p>
+              <a 
+                href="/dashboard" 
+                className="inline-flex items-center px-8 py-4 bg-white text-blue-600 rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 gap-2"
+              >
+                Get Started for Free
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
 
 
 
