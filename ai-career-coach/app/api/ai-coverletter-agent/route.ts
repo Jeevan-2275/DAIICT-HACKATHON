@@ -102,54 +102,6 @@ try {
   }
 }
 
-
-const runId = resultId?.ids[0];
-    let runStatus;
-
-    // Poll Inngest until completion or timeout
-    const timeout = 30000; // 30s
-    const start = Date.now();
-    while (true) {
-      if (Date.now() - start > timeout) {
-        return NextResponse.json({
-          message: "Timeout waiting for Inngest. Cover letter may still be generating.",
-          runId,
-        });
-      }
-
-      runStatus = await getInngestRun(runId);
-      const status = runStatus?.data?.[0]?.status;
-
-      if (status === "Completed") break;
-      if (status === "Failed") throw new Error("Inngest run failed");
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
-
-    const output = runStatus?.data?.[0]?.output?.[0];
-    if (!output) {
-      return NextResponse.json({
-        message: "Cover letter generation completed but no output available yet",
-        runId,
-      });
-    }
-    let outputData;
-    
-try {
-  outputData = JSON.parse(output.content);
-} catch {
-  outputData = { coverLetter: output.content }; // fallback if not JSON
-}
-
-    return NextResponse.json(outputData);
-
-  } catch (err: any) {
-    console.error("Cover letter generation failed:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
-  }
-}
-
-// Helper function to poll Inngest
 async function getInngestRun(runId: string) {
   const result = await axios.get(`${process.env.INNGEST_SERVER_HOST}/v1/events/${runId}/runs`, {
     headers: {
