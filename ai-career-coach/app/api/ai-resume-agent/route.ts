@@ -41,5 +41,44 @@ const userId = dbUser[0].id;
     }
   });
 
+    const runId = resultId?.ids[0];
+let runStatus;
+try {
+  const timeout = 30000; // 30 seconds max
+  const start = Date.now();
+  while (true) {
+    if (Date.now() - start > timeout){
+      console.warn("Timeout waiting for Inngest run:", runId);
+        return NextResponse.json({
+      message: "Timeout waiting for Inngest. Analysis may still be running in background.",
+      recordId,
+      runId,
+    });
+  }
+    runStatus = await getRuns(runId);
+    const status = runStatus?.data?.[0]?.status;
+    if (status === "Completed") break;
+    if (status === "Failed") throw new Error("Inngest run failed");
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+
+  const output = runStatus?.data?.[0]?.output?.[0];
+if (!output) {
+  console.warn("No analysis output found for runId:", runId);
+  return NextResponse.json({
+    message: "Analysis completed but no output available yet",
+    recordId,
+    runId,
+  });
+}
+  return NextResponse.json(output);
+
+} catch (err:any) {
+  console.error("Polling Inngest failed:", err);
+  return NextResponse.json({ error: err.message }, { status: 500 });
+}
+
+
 
 }
